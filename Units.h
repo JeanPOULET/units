@@ -43,7 +43,13 @@ struct Qty {
 
 	intmax_t value;
 
-	Qty(intmax_t v);
+	Qty(){
+		value = 0;
+	}
+
+	Qty(intmax_t v){
+		value = v;
+	}
 
 	template<typename ROther>
 	Qty& operator+=(Qty<U, ROther> other);
@@ -82,7 +88,7 @@ namespace details{
 
 	template<class Unit1, class Unit2>
 	class multiplication{
-		using unit_div = Unit<Unit1::metre + Unit2::metre, Unit1::kilogram + Unit2::kilogram,  Unit1::Second + Unit2::Second, Unit1::Ampere + Unit2::Ampere,  Unit1::Kelvin + Unit2::Kelvin,  Unit1::Mole + Unit2::Mole,  Unit1::Candela + Unit2::Candela>;
+		using unit_mult = Unit<Unit1::metre + Unit2::metre, Unit1::kilogram + Unit2::kilogram,  Unit1::Second + Unit2::Second, Unit1::Ampere + Unit2::Ampere,  Unit1::Kelvin + Unit2::Kelvin,  Unit1::Mole + Unit2::Mole,  Unit1::Candela + Unit2::Candela>;
 	};
 }
 
@@ -91,22 +97,52 @@ namespace details{
 */
 
 template<typename U, typename R1, typename R2>
-bool operator==(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_equal<R1, R2>;}
+bool operator==(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_equal<R1, R2>::value){
+ 		return q1.value == q2.value;
+	}
+	return q1.value == q2.value*R2;
+}		  
 
 template<typename U, typename R1, typename R2>
-bool operator!=(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_not_equal<R1, R2>;}
+bool operator!=(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_equal<R1, R2>::value){
+ 		return q1.value != q2.value;
+	}
+	return q1.value != q2.value*R2;
+}	
 
 template<typename U, typename R1, typename R2>
-bool operator<(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_less<R1, R2>;}
+bool operator<(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_equal<R1, R2>::value){
+ 		return q1.value < q2.value;
+	}
+	return q1.value < q2.value*R2;
+}	
 
 template<typename U, typename R1, typename R2>
-bool operator<=(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_less_equal<R1, R2>;}
+bool operator<=(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_equal<R1, R2>::value){
+ 		return q1.value <= q2.value;
+	}
+	return q1.value <= q2.value*R2;
+}	
 
 template<typename U, typename R1, typename R2>
-bool operator>(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_greater<R1, R2>;}
+bool operator>(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_equal<R1, R2>::value){
+ 		return q1.value > q2.value;
+	}
+	return q1.value > q2.value*R2;
+}	
 
 template<typename U, typename R1, typename R2>
-bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_greater_equal<R1, R2>;}
+bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_equal<R1, R2>::value){
+ 		return q1.value >= q2.value;
+	}
+	return q1.value >= q2.value*R2;
+}	
 
 /*
 * Arithmetic operators
@@ -119,7 +155,7 @@ template<typename U, typename R1, typename R2>
 Qty<U, std::ratio_subtract<R1, R2>> operator-(Qty<U, R1> q1, Qty<U, R2> q2);
 
 template<typename U1, typename R1, typename U2, typename R2>
-Qty<details::division<U1, U2>, std::ratio_multiply<R1, R2>> operator*(Qty<U1, R1> q1, Qty<U2, R2> q2);
+Qty<details::multiplication<U1, U2>, std::ratio_multiply<R1, R2>> operator*(Qty<U1, R1> q1, Qty<U2, R2> q2);
 
 template<typename U1, typename R1, typename U2, typename R2>
 Qty<details::division<U1, U2>, std::ratio_divide<R1, R2>> operator/(Qty<U1, R1> q1, Qty<U2, R2> q2); 
