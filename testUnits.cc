@@ -6,11 +6,15 @@
 
 TEST(tests,first){
 
-  using  namespace phy:: literals;
+  using  namespace phy::literals;
   auto velocity = 100000_metres / 3600_seconds;
   phy::Qty<phy::Metre , std::milli> mm(32);
+  phy::Qty<phy::Metre , std::milli> kg(10);
+
+  auto ntm = mm +kg;
+
   auto nm = phy::qtyCast <phy::Qty <phy::Metre , std::nano >>(mm);
-  
+
 }
 
 

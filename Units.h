@@ -83,11 +83,13 @@ using Inch = Qty<Metre, std::ratio<2, 100>>;
 namespace details{
 	template<class Unit1, class Unit2>
 	class division{
+		public:
 		using unit_div = Unit<Unit1::metre - Unit2::metre, Unit1::kilogram - Unit2::kilogram,  Unit1::Second - Unit2::Second, Unit1::Ampere - Unit2::Ampere,  Unit1::Kelvin - Unit2::Kelvin,  Unit1::Mole - Unit2::Mole,  Unit1::Candela - Unit2::Candela>;
 	};
 
 	template<class Unit1, class Unit2>
 	class multiplication{
+		public:
 		using unit_mult = Unit<Unit1::metre + Unit2::metre, Unit1::kilogram + Unit2::kilogram,  Unit1::Second + Unit2::Second, Unit1::Ampere + Unit2::Ampere,  Unit1::Kelvin + Unit2::Kelvin,  Unit1::Mole + Unit2::Mole,  Unit1::Candela + Unit2::Candela>;
 	};
 }
@@ -149,16 +151,24 @@ bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2){
 */
 
 template<typename U, typename R1, typename R2>
-Qty<U, std::ratio_add<R1, R2>> operator+(Qty<U, R1> q1, Qty<U, R2> q2);
+Qty<U, std::ratio_add<R1, R2>> operator+(Qty<U, R1> q1, Qty<U, R2> q2){
+	return Qty<((q1::value*(R1::num/R1::den)) / (q2::value*(R2::num/R2::den))),std::ratio_add<R1, R2>>;
+}
 
 template<typename U, typename R1, typename R2>
-Qty<U, std::ratio_subtract<R1, R2>> operator-(Qty<U, R1> q1, Qty<U, R2> q2);
+Qty<U, std::ratio_subtract<R1, R2>> operator-(Qty<U, R1> q1, Qty<U, R2> q2){
+	return Qty<((q1::value*(R1::num/R1::den)) / (q2::value*(R2::num/R2::den))),std::ratio_subtract<R1, R2>>;
+}
 
 template<typename U1, typename R1, typename U2, typename R2>
-Qty<details::multiplication<U1, U2>, std::ratio_multiply<R1, R2>> operator*(Qty<U1, R1> q1, Qty<U2, R2> q2);
+Qty<details::multiplication<U1, U2>, std::ratio_multiply<R1, R2>> operator*(Qty<U1, R1> q1, Qty<U2, R2> q2){
+	return Qty<((q1::value*(R1::num/R1::den)) / (q2::value*(R2::num/R2::den))),std::ratio_multiply<R1, R2>>;
+}
 
 template<typename U1, typename R1, typename U2, typename R2>
-Qty<details::division<U1, U2>, std::ratio_divide<R1, R2>> operator/(Qty<U1, R1> q1, Qty<U2, R2> q2); 
+Qty<details::division<U1, U2>, std::ratio_divide<R1, R2>> operator/(Qty<U1, R1> q1, Qty<U2, R2> q2){
+	return Qty<((q1::value*(R1::num/R1::den)) / (q2::value*(R2::num/R2::den))),std::ratio_divide<R1, R2>>;
+}
 
 
 /*
@@ -173,13 +183,34 @@ ResQty qtyCast(Qty<U,R>);
 		* Some user-defined literals
 		*/
 
-		Length operator "" _metres(unsigned long long int val);
-		Mass operator "" _kilograms(unsigned long long int val);
-		Time operator "" _seconds(unsigned long long int val);
-		Current operator "" _amperes(unsigned long long int val);
-		Temperature operator "" _kelvins(unsigned long long int val);
-		Amount operator "" _moles(unsigned long long int val);
-		LuminousIntensity operator "" _candelas(unsigned long long int val);
+		Length operator "" _metres(unsigned long long int val){
+			Qty<Metre,std::ratio<1>> re(val);
+			return re;
+		}
+		Mass operator "" _kilograms(unsigned long long int val){
+			Qty<Kilogram,std::ratio<1>> re(val);
+			return re;
+		}
+		Time operator "" _seconds(unsigned long long int val){
+			Qty<Second,std::ratio<1>> re(val);
+			return re;
+		}
+		Current operator "" _amperes(unsigned long long int val){
+			Qty<Ampere,std::ratio<1>> re(val);
+			return re;
+		}
+		Temperature operator "" _kelvins(unsigned long long int val){
+			Qty<Kelvin,std::ratio<1>> re(val);
+			return re;
+		}
+		Amount operator "" _moles(unsigned long long int val){
+			Qty<Mole,std::ratio<1>> re(val);
+			return re;
+		}
+		LuminousIntensity operator "" _candelas(unsigned long long int val){
+			Qty<Candela,std::ratio<1>> re(val);
+			return re;
+		}
 
 	}
 
