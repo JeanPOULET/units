@@ -11,13 +11,13 @@ namespace phy {
    */
   template<int Metre, int Kilogram, int Second, int Ampere, int Kelvin, int Mole, int Candela>
   struct Unit {
-    static constexpr int metre    = Metre;
-    static constexpr int kilogram = Kilogram;
-    static constexpr int second   = Second;
-    static constexpr int ampere   = Ampere;
-    static constexpr int kelvin   = Kelvin;
-    static constexpr int mole     = Mole;
-    static constexpr int candela  = Candela;
+	static constexpr int metre    = Metre;
+	static constexpr int kilogram = Kilogram;
+	static constexpr int second   = Second;
+	static constexpr int ampere   = Ampere;
+	static constexpr int kelvin   = Kelvin;
+	static constexpr int mole     = Mole;
+	static constexpr int candela  = Candela;
   };
 
   /*
@@ -38,21 +38,21 @@ namespace phy {
    */
   template<class U, class R = std::ratio<1>>
   struct Qty {
-    using Unit  = U;
-    using Ratio = R;
+	using Unit  = U;
+	using Ratio = R;
 
-    intmax_t value;
+	intmax_t value;
 
-    Qty(intmax_t v);
+	Qty(intmax_t v);
 
-    template<typename ROther>
-    Qty& operator+=(Qty<U, ROther> other);
+	template<typename ROther>
+	Qty& operator+=(Qty<U, ROther> other);
 
-    template<typename ROther>
-    Qty& operator-=(Qty<U, ROther> other);
+	template<typename ROther>
+	Qty& operator-=(Qty<U, ROther> other);
 
-    /*template<typename ROther>
-    Qty& operator*=(Qty<U, ROther> other);*/
+	template<typename ROther>
+	Qty& operator*=(Qty<U, ROther> other);
 
   };
 
@@ -102,9 +102,20 @@ namespace phy {
   /*
    * Arithmetic operators
    */
+    
+	namespace details{
+		template<class qt1, class qt2>
+		class addition{
+			public:
+			using res = Unit<qt1::metre,qt1::kilogram,qt1::second,qt1::ampere,qt1::kelvin,qt1::mole,qt1::candela>;
+			return res;
+		};
+
+	};
+
 
   template<typename U, typename R1, typename R2>
-  details operator+(Qty<U, R1> q1, Qty<U, R2> q2);
+  details::addition operator+(Qty<U, R1> q1, Qty<U, R2> q2);
 
   template<typename U, typename R1, typename R2>
   details operator-(Qty<U, R1> q1, Qty<U, R2> q2);
