@@ -91,27 +91,22 @@ namespace details{
 */
 
 template<typename U, typename R1, typename R2>
-bool operator==(Qty<U, R1> q1, Qty<U, R2> q2){
-	if(std::is_same<R1,R2>() && std::ratio_equal<R1,R2>()){
-		return true;
-	}
-	return false;
-}
+bool operator==(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_equal<R1, R2>;}
 
 template<typename U, typename R1, typename R2>
-bool operator!=(Qty<U, R1> q1, Qty<U, R2> q2);
+bool operator!=(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_not_equal<R1, R2>;}
 
 template<typename U, typename R1, typename R2>
-bool operator<(Qty<U, R1> q1, Qty<U, R2> q2);
+bool operator<(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_less<R1, R2>;}
 
 template<typename U, typename R1, typename R2>
-bool operator<=(Qty<U, R1> q1, Qty<U, R2> q2);
+bool operator<=(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_less_equal<R1, R2>;}
 
 template<typename U, typename R1, typename R2>
-bool operator>(Qty<U, R1> q1, Qty<U, R2> q2);
+bool operator>(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_greater<R1, R2>;}
 
 template<typename U, typename R1, typename R2>
-bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2);
+bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_greater_equal<R1, R2>;}
 
 /*
 * Arithmetic operators
