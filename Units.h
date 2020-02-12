@@ -11,13 +11,13 @@ namespace phy {
    */
   template<int Metre, int Kilogram, int Second, int Ampere, int Kelvin, int Mole, int Candela>
   struct Unit {
-    static constexpr int metre = Metre;
+    static constexpr int metre    = Metre;
     static constexpr int kilogram = Kilogram;
-    static constexpr int second = Second;
-    static constexpr int ampere = Ampere;
-    static constexpr int kelvin = Kelvin;
-    static constexpr int mole = Mole;
-    static constexpr int candela = Candela;
+    static constexpr int second   = Second;
+    static constexpr int ampere   = Ampere;
+    static constexpr int kelvin   = Kelvin;
+    static constexpr int mole     = Mole;
+    static constexpr int candela  = Candela;
   };
 
   /*
@@ -31,14 +31,14 @@ namespace phy {
   using Kelvin    = Unit<0,0,0,0,1,0,0>;
   using Mole      = Unit<0,0,0,0,0,1,0>;
   using Candela   = Unit<0,0,0,0,0,0,1>;
-  using Radian    = /* implementation defined */;
+  using Radian    = Unit<0,0,0,0,0,0,0>;
 
   /*
    * A quantity is a value associated with a unit and a ratio
    */
   template<class U, class R = std::ratio<1>>
   struct Qty {
-    using Unit = U;
+    using Unit  = U;
     using Ratio = R;
 
     intmax_t value;
@@ -51,25 +51,28 @@ namespace phy {
     template<typename ROther>
     Qty& operator-=(Qty<U, ROther> other);
 
+    /*template<typename ROther>
+    Qty& operator*=(Qty<U, ROther> other);*/
+
   };
 
   /*
    * Various quantities
    */
 
-  using Length = Qty<Metre>;
-  using Mass =Qty<Kilogram>;
-  using Time = Qty<Second>;
-  using Current = Qty<Ampere>;
-  using Temperature = Qty<Kelvin>;
-  using Amount = Qty<Mole>;
+  using Length            = Qty<Metre>;
+  using Mass              = Qty<Kilogram>;
+  using Time              = Qty<Second>;
+  using Current           = Qty<Ampere>;
+  using Temperature       = Qty<Kelvin>;
+  using Amount            = Qty<Mole>;
   using LuminousIntensity = Qty<Candela>;
 
   /*
    * Some weird quantities
    */
 
-  using Mile = /* implementation defined */;
+  using Mile = /**/;
   using Yard = /* implementation defined */;
   using Foot = /* implementation defined */;
   using Inch = /* implementation defined */;
@@ -101,16 +104,16 @@ namespace phy {
    */
 
   template<typename U, typename R1, typename R2>
-  /* implementation defined */ operator+(Qty<U, R1> q1, Qty<U, R2> q2);
+  details operator+(Qty<U, R1> q1, Qty<U, R2> q2);
 
   template<typename U, typename R1, typename R2>
-  /* implementation defined */ operator-(Qty<U, R1> q1, Qty<U, R2> q2);
+  details operator-(Qty<U, R1> q1, Qty<U, R2> q2);
 
   template<typename U1, typename R1, typename U2, typename R2>
-  /* implementation defined */ operator*(Qty<U1, R1> q1, Qty<U2, R2> q2);
+  details operator*(Qty<U1, R1> q1, Qty<U2, R2> q2);
 
   template<typename U1, typename R1, typename U2, typename R2>
-  /* implementation defined */ operator/(Qty<U1, R1> q1, Qty<U2, R2> q2);
+  details operator/(Qty<U1, R1> q1, Qty<U2, R2> q2); 
 
 
   /*
