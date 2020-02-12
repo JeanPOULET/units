@@ -122,21 +122,21 @@ namespace phy {
   template<typename ResQty, typename U, typename R>
   ResQty qtyCast(Qty<U,R>);
 
-  namespace literals {
+  	namespace literals {
 
-    /*
-     * Some user-defined literals
-     */
+		/*
+		* Some user-defined literals
+		*/
 
-    Length operator "" _metres(unsigned long long int val);
-    Mass operator "" _kilograms(unsigned long long int val);
-    Time operator "" _seconds(unsigned long long int val);
-    Current operator "" _amperes(unsigned long long int val);
-    Temperature operator "" _kelvins(unsigned long long int val);
-    Amount operator "" _moles(unsigned long long int val);
-    LuminousIntensity operator "" _candelas(unsigned long long int val);
+		Length operator "" _metres(unsigned long long int val);
+		Mass operator "" _kilograms(unsigned long long int val);
+		Time operator "" _seconds(unsigned long long int val);
+		Current operator "" _amperes(unsigned long long int val);
+		Temperature operator "" _kelvins(unsigned long long int val);
+		Amount operator "" _moles(unsigned long long int val);
+		LuminousIntensity operator "" _candelas(unsigned long long int val);
 
-  }
+	}
 
 }
 
