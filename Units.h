@@ -77,12 +77,12 @@ using Inch = Qty<Metre, std::ratio<2, 100>>;
 namespace details{
 	template<class Unit1, class Unit2>
 	class division{
-		using unit_div = <Unit1::metre - Unit2::metre, Unit1::kilogram - Unit2::kilogram,  Unit1::Second - Unit2::Second, Unit1::Ampere - Unit2::Ampere,  Unit1::Kelvin - Unit2::Kelvin,  Unit1::Mole - Unit2::Mole,  Unit1::Candela - Unit2::Candela>;
+		using unit_div = Unit<Unit1::metre - Unit2::metre, Unit1::kilogram - Unit2::kilogram,  Unit1::Second - Unit2::Second, Unit1::Ampere - Unit2::Ampere,  Unit1::Kelvin - Unit2::Kelvin,  Unit1::Mole - Unit2::Mole,  Unit1::Candela - Unit2::Candela>;
 	};
 
 	template<class Unit1, class Unit2>
 	class multiplication{
-		using unit_div = <Unit1::metre + Unit2::metre, Unit1::kilogram + Unit2::kilogram,  Unit1::Second + Unit2::Second, Unit1::Ampere + Unit2::Ampere,  Unit1::Kelvin + Unit2::Kelvin,  Unit1::Mole + Unit2::Mole,  Unit1::Candela + Unit2::Candela>;
+		using unit_div = Unit<Unit1::metre + Unit2::metre, Unit1::kilogram + Unit2::kilogram,  Unit1::Second + Unit2::Second, Unit1::Ampere + Unit2::Ampere,  Unit1::Kelvin + Unit2::Kelvin,  Unit1::Mole + Unit2::Mole,  Unit1::Candela + Unit2::Candela>;
 	};
 }
 
@@ -91,7 +91,12 @@ namespace details{
 */
 
 template<typename U, typename R1, typename R2>
-bool operator==(Qty<U, R1> q1, Qty<U, R2> q2);
+bool operator==(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::is_same<R1,R2>() && std::ratio_equal<R1,R2>()){
+		return true;
+	}
+	return false;
+}
 
 template<typename U, typename R1, typename R2>
 bool operator!=(Qty<U, R1> q1, Qty<U, R2> q2);
