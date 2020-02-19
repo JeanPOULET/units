@@ -174,7 +174,7 @@ bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2){
 */
 
 template<typename U, typename R1, typename R2>
-Qty<U, R1> operator+(Qty<U, R1> q1, Qty<U, R2> q2){
+Qty<U, R2> operator+(Qty<U, R1> q1, Qty<U, R2> q2){
 	if(std::ratio_equal<R1, R2>::value){
 		Qty<U,R2> ty;
 		ty.value = q1.value+q2.value;
