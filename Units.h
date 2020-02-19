@@ -52,10 +52,24 @@ struct Qty {
 	}
 
 	template<typename ROther>
-	Qty& operator+=(Qty<U, ROther> other);
+	Qty& operator+=(Qty<U, ROther> other){
+		if(this.U != other.U){
+			return this;
+		}
+		Qty<U,R>res;
+		res.value = value*R::value + other.value*R::value;
+		return res;
+	}
 
 	template<typename ROther>
-	Qty& operator-=(Qty<U, ROther> other);
+	Qty& operator-=(Qty<U, ROther> other){
+		if(this.U != other.U){
+			return this;
+		}
+		Qty<U,R>res;
+		res.value = value*R::value - other.value*R::value;
+		return res;
+	}
 
 };
 
