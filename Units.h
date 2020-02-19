@@ -58,7 +58,7 @@ struct Qty {
 			return this;
 		}
 		Qty<U,R>res;
-		res.value = value*R::value + other.value*R::value;
+		res.value = value*(ROther::num/ROther::den) + other.value*(ROther::num/ROther::den);
 		return res;
 	}
 
@@ -68,7 +68,7 @@ struct Qty {
 			return this;
 		}
 		Qty<U,R>res;
-		res.value = value*R::value - other.value*R::value;
+		res.value = value*(ROther::num/ROther::den) - other.value*(ROther::num/ROther::den);
 		return res;
 	}
 
@@ -182,18 +182,20 @@ Qty<U, R1> operator+(Qty<U, R1> q1, Qty<U, R2> q2){
 		return ty;
 	}else{
 		Qty<U,R1> ty;
-		ty.value = ((q1.value*(R1::num/R1::den)) + (q2.value*(R2::num/R2::den)));
-		printf("value  : %d\n q1 : %d  q2 : %d\n",ty.value,q1.value,q2.value);
+		ty.value = ((double(q1.value*(double(R1::num)/R1::den))) + (double(q2.value*(double(R2::num)/R2::den))));
+		printf("num = %d, den = %d \nR = %lf \n", R1::num, R1::den, (double(R1::num)/R1::den));
+		printf("q1 = %d\nq2 = %d\nq1.value = %lf\nq2.value = %lf\n",q1.value, q2.value, (double(q1.value*(double(R1::num)/R1::den))), (double(q2.value*(double(R2::num)/R2::den))));
+		
+		printf("ty value = %d\n", ty.value);
 		return ty;
 	}
-	
 }
 
 template<typename U, typename R1, typename R2>
 Qty<U, R1> operator-(Qty<U, R1> q1, Qty<U, R2> q2){
-	if(std::ratio_less<R1, R2>::value){
+	if(std::ratio_equal<R1, R2>::value){
 		Qty<U,R2> ty;
-		ty.value = ((q1.value*(R1::num/R1::den)) - (q2.value*(R2::num/R2::den)));
+		ty.value = q1.value - q2.value;
 		return ty;
 	}else{
 		Qty<U,R1> ty;
@@ -205,7 +207,6 @@ Qty<U, R1> operator-(Qty<U, R1> q1, Qty<U, R2> q2){
 
 template<typename U1, typename R1, typename U2, typename R2>
 Qty<details::multiplication<U1, U2>, std::ratio_multiply<R1, R2>> operator*(Qty<U1, R1> q1, Qty<U2, R2> q2){
-	 
 	Qty<details::multiplication<U1, U2>,std::ratio_multiply<R1, R2>> ty;
 	ty.value = ((q1.value*(R1::num/R1::den)) * (q2.value*(R2::num/R2::den)));
 	return ty;
