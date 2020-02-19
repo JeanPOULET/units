@@ -57,7 +57,7 @@ struct Qty {
 			return this;
 		}
 		Qty<U,R>res;
-		res.value = value*R::value + other.value*R::value;
+		res.value = value*(R1::num/R1::den) + other.value*(R1::num/R1::den);
 		return res;
 	}
 
@@ -67,7 +67,7 @@ struct Qty {
 			return this;
 		}
 		Qty<U,R>res;
-		res.value = value*R::value - other.value*R::value;
+		res.value = value*(R1::num/R1::den) - other.value*(R1::num/R1::den);
 		return res;
 	}
 
@@ -183,7 +183,6 @@ Qty<U, R1> operator+(Qty<U, R1> q1, Qty<U, R2> q2){
 		ty.value = ((q1.value*(R1::num/R1::den)) + (q2.value*(R2::num/R2::den)));
 		return ty;
 	}
-	
 }
 
 template<typename U, typename R1, typename R2>
@@ -202,16 +201,15 @@ Qty<U, R1> operator-(Qty<U, R1> q1, Qty<U, R2> q2){
 
 template<typename U1, typename R1, typename U2, typename R2>
 Qty<details::multiplication<U1, U2>, std::ratio_multiply<R1, R2>> operator*(Qty<U1, R1> q1, Qty<U2, R2> q2){
-	details::multiplication<U1, U2> res;
-	Qty<res.unit_mult,std::ratio_multiply<R1, R2>> ty;
+	 ;
+	Qty<details::multiplication<U1, U2>,std::ratio_multiply<R1, R2>> ty;
 	ty.value = ((q1.value*(R1::num/R1::den)) * (q2.value*(R2::num/R2::den)));
 	return ty;
 }
 
 template<typename U1, typename R1, typename U2, typename R2>
 Qty<details::division<U1, U2>, std::ratio_divide<R1, R2>> operator/(Qty<U1, R1> q1, Qty<U2, R2> q2){
-	details::division<U1, U2> res;
-	Qty<res,std::ratio_divide<R1, R2>> ty;
+	Qty<details::division<U1, U2>,std::ratio_divide<R1, R2>> ty;
 	ty.value = ((q1.value*(R1::num/R1::den)) / (q2.value*(R2::num/R2::den)));
 	return ty;
 }
@@ -221,7 +219,9 @@ Qty<details::division<U1, U2>, std::ratio_divide<R1, R2>> operator/(Qty<U1, R1> 
 * Cast function between two quantities
 */
 template<typename ResQty, typename U, typename R>
-ResQty qtyCast(Qty<U,R>);
+ResQty qtyCast(Qty<U,R> qty){
+
+}
 
 	namespace literals {
 

@@ -13,7 +13,7 @@ TEST(tests,first){
 
   auto ntm = mm +kg;
 
-  auto nm = phy::qtyCast <phy::Qty <phy::Metre , std::nano >>(mm);
+  //auto nm = phy::qtyCast <phy::Qty <phy::Metre , std::nano >>(mm);
 
 }
 
