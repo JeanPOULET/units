@@ -103,7 +103,7 @@ bool operator==(Qty<U, R1> q1, Qty<U, R2> q2){
 	if(std::ratio_equal<R1, R2>::value){
  		return q1.value == q2.value;
 	}
-	return q1.value == q2.value*R2;
+	return q1.value == q2.value*R2::den;
 }		  
 
 template<typename U, typename R1, typename R2>
@@ -111,7 +111,7 @@ bool operator!=(Qty<U, R1> q1, Qty<U, R2> q2){
 	if(std::ratio_equal<R1, R2>::value){
  		return q1.value != q2.value;
 	}
-	return q1.value != q2.value*R2;
+	return q1.value != q2.value*R2::den;
 }	
 
 template<typename U, typename R1, typename R2>
@@ -119,7 +119,7 @@ bool operator<(Qty<U, R1> q1, Qty<U, R2> q2){
 	if(std::ratio_equal<R1, R2>::value){
  		return q1.value < q2.value;
 	}
-	return q1.value < q2.value*R2;
+	return q1.value < q2.value*R2::den;
 }	
 
 template<typename U, typename R1, typename R2>
@@ -127,7 +127,7 @@ bool operator<=(Qty<U, R1> q1, Qty<U, R2> q2){
 	if(std::ratio_equal<R1, R2>::value){
  		return q1.value <= q2.value;
 	}
-	return q1.value <= q2.value*R2;
+	return q1.value <= q2.value*R2::den;
 }	
 
 template<typename U, typename R1, typename R2>
@@ -135,7 +135,7 @@ bool operator>(Qty<U, R1> q1, Qty<U, R2> q2){
 	if(std::ratio_equal<R1, R2>::value){
  		return q1.value > q2.value;
 	}
-	return q1.value > q2.value*R2;
+	return q1.value > q2.value*R2::den;
 }	
 
 template<typename U, typename R1, typename R2>
@@ -143,7 +143,7 @@ bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2){
 	if(std::ratio_equal<R1, R2>::value){
  		return q1.value >= q2.value;
 	}
-	return q1.value >= q2.value*R2;
+	return q1.value >= q2.value*R2::den;
 }	
 
 /*
