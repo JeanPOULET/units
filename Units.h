@@ -81,16 +81,24 @@ using Foot = Qty<Metre, std::ratio<3, 10>>;
 using Inch = Qty<Metre, std::ratio<2, 100>>;
 
 namespace details{
-	template<class Unit1, class Unit2>
-	class division{
+	template<class Unit1>
+	class addition{
 		public:
-		using unit_div = Unit<Unit1::metre - Unit2::metre, Unit1::kilogram - Unit2::kilogram,  Unit1::Second - Unit2::Second, Unit1::Ampere - Unit2::Ampere,  Unit1::Kelvin - Unit2::Kelvin,  Unit1::Mole - Unit2::Mole,  Unit1::Candela - Unit2::Candela>;
+		using unit_plus = Unit<Unit1::Metre,Unit1::Kilogram,Unit1::Second,Unit1::Ampere,Unit1::Kelvin,Unit1::Mole,Unit1::Candela>;
+	
 	};
 
 	template<class Unit1, class Unit2>
-	class multiplication{
+	class division{
 		public:
-		using unit_mult = Unit<Unit1::metre + Unit2::metre, Unit1::kilogram + Unit2::kilogram,  Unit1::Second + Unit2::Second, Unit1::Ampere + Unit2::Ampere,  Unit1::Kelvin + Unit2::Kelvin,  Unit1::Mole + Unit2::Mole,  Unit1::Candela + Unit2::Candela>;
+		using unit_div = Unit<Unit1::metre - Unit2::metre, Unit1::kilogram - Unit2::kilogram,  Unit1::second - Unit2::second, Unit1::ampere - Unit2::ampere,  Unit1::kelvin - Unit2::kelvin,  Unit1::mole - Unit2::mole,  Unit1::candela - Unit2::candela>;
+	};
+
+	template<class Unit1, class Unit2>
+	struct multiplication{
+		
+		using unit_mult = Unit<Unit1::metre + Unit2::metre, Unit1::kilogram + Unit2::kilogram,  Unit1::second + Unit2::second, Unit1::ampere + Unit2::ampere,  Unit1::kelvin + Unit2::kelvin,  Unit1::mole + Unit2::mole,  Unit1::candela + Unit2::candela>;
+
 	};
 }
 
@@ -151,23 +159,47 @@ bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2){
 */
 
 template<typename U, typename R1, typename R2>
-Qty<U, std::ratio_add<R1, R2>> operator+(Qty<U, R1> q1, Qty<U, R2> q2){
-	return Qty<((q1.value*(R1::num/R1::den)) + (q2.value*(R2::num/R2::den))),std::ratio_add<R1, R2>>;
+Qty<U, R1> operator+(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_less<R1, R2>::value){
+		Qty<U,R2> ty;
+		ty.value = ((q1.value*(R1::num/R1::den)) + (q2.value*(R2::num/R2::den)));
+		return ty;
+	}else{
+		Qty<U,R1> ty;
+		ty.value = ((q1.value*(R1::num/R1::den)) + (q2.value*(R2::num/R2::den)));
+		return ty;
+	}
+	
 }
 
 template<typename U, typename R1, typename R2>
-Qty<U, std::ratio_subtract<R1, R2>> operator-(Qty<U, R1> q1, Qty<U, R2> q2){
-	return Qty<((q1.value*(R1::num/R1::den)) - (q2.value*(R2::num/R2::den))),std::ratio_subtract<R1, R2>>;
+Qty<U, R1> operator-(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_less<R1, R2>::value){
+		Qty<U,R2> ty;
+		ty.value = ((q1.value*(R1::num/R1::den)) - (q2.value*(R2::num/R2::den)));
+		return ty;
+	}else{
+		Qty<U,R1> ty;
+		ty.value = ((q1.value*(R1::num/R1::den)) - (q2.value*(R2::num/R2::den)));
+		return ty;
+	}
+
 }
 
 template<typename U1, typename R1, typename U2, typename R2>
 Qty<details::multiplication<U1, U2>, std::ratio_multiply<R1, R2>> operator*(Qty<U1, R1> q1, Qty<U2, R2> q2){
-	return Qty<((q1::value*(R1::num/R1::den)) * (q2::value*(R2::num/R2::den))),std::ratio_multiply<R1, R2>>;
+	details::multiplication<U1, U2> res;
+	Qty<res.unit_mult,std::ratio_multiply<R1, R2>> ty;
+	ty.value = ((q1.value*(R1::num/R1::den)) * (q2.value*(R2::num/R2::den)));
+	return ty;
 }
 
 template<typename U1, typename R1, typename U2, typename R2>
 Qty<details::division<U1, U2>, std::ratio_divide<R1, R2>> operator/(Qty<U1, R1> q1, Qty<U2, R2> q2){
-	return Qty<((q1::value*(R1::num/R1::den)) / (q2::value*(R2::num/R2::den))),std::ratio_divide<R1, R2>>;
+	details::division<U1, U2> res;
+	Qty<res,std::ratio_divide<R1, R2>> ty;
+	ty.value = ((q1.value*(R1::num/R1::den)) / (q2.value*(R2::num/R2::den)));
+	return ty;
 }
 
 
