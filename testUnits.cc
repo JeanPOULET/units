@@ -6,14 +6,17 @@
 
 TEST(tests,first){
 
-  using  namespace phy::literals;
-  auto velocity = 100000_metres / 3600_seconds;
-  phy::Qty<phy::Metre , std::milli> mm(32);
-  phy::Qty<phy::Metre , std::milli> kg(10);
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre , std::milli> mm(30);
+	phy::Qty<phy::Metre , std::milli> mm2(10);
 
-  auto ntm = mm +kg;
-
-  auto nm = phy::qtyCast <phy::Qty <phy::Metre , std::nano >>(mm);
+	auto mm3 = mm +mm2;
+	std::cout<<"mm3 = "<<mm3.value<<"\n";
+	std::cout<<"mm2 = "<<mm2.value<<"\n";
+	std::cout<<"mm = "<<mm.value<<"\n";
+	auto nm = phy::qtyCast <phy::Qty <phy::Metre , std::nano >>(mm3);
+	EXPECT_EQ(nm.value,40000000);
+	
 
 }
 
