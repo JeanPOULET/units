@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <ratio>
+#include <stdio.h>
 
 namespace phy {
 
@@ -57,7 +58,7 @@ struct Qty {
 			return this;
 		}
 		Qty<U,R>res;
-		res.value = value*(R1::num/R1::den) + other.value*(R1::num/R1::den);
+		res.value = value*(ROther::num/ROther::den) + other.value*(ROther::num/ROther::den);
 		return res;
 	}
 
@@ -67,7 +68,7 @@ struct Qty {
 			return this;
 		}
 		Qty<U,R>res;
-		res.value = value*(R1::num/R1::den) - other.value*(R1::num/R1::den);
+		res.value = value*(ROther::num/ROther::den) - other.value*(ROther::num/ROther::den);
 		return res;
 	}
 
@@ -176,11 +177,16 @@ template<typename U, typename R1, typename R2>
 Qty<U, R1> operator+(Qty<U, R1> q1, Qty<U, R2> q2){
 	if(std::ratio_less<R1, R2>::value){
 		Qty<U,R2> ty;
-		ty.value = ((q1.value*(R1::num/R1::den)) + (q2.value*(R2::num/R2::den)));
+		ty.value = ((q1.value*(double(R1::num)/R1::den)) + (q2.value*(double(R2::num)/R2::den)));
+		printf("value = %d\n", (q1.value*(R1::num/R1::den)));
 		return ty;
 	}else{
 		Qty<U,R1> ty;
-		ty.value = ((q1.value*(R1::num/R1::den)) + (q2.value*(R2::num/R2::den)));
+		ty.value = ((double(q1.value*(double(R1::num)/R1::den))) + (double(q2.value*(double(R2::num)/R2::den))));
+		printf("num = %d, den = %d \nR = %lf \n", R1::num, R1::den, (double(R1::num)/R1::den));
+		printf("q1 = %d\nq2 = %d\nq1.value = %lf\nq2.value = %lf\n",q1.value, q2.value, (double(q1.value*(double(R1::num)/R1::den))), (double(q2.value*(double(R2::num)/R2::den))));
+		
+		printf("ty value = %d\n", ty.value);
 		return ty;
 	}
 }
@@ -201,7 +207,6 @@ Qty<U, R1> operator-(Qty<U, R1> q1, Qty<U, R2> q2){
 
 template<typename U1, typename R1, typename U2, typename R2>
 Qty<details::multiplication<U1, U2>, std::ratio_multiply<R1, R2>> operator*(Qty<U1, R1> q1, Qty<U2, R2> q2){
-	 ;
 	Qty<details::multiplication<U1, U2>,std::ratio_multiply<R1, R2>> ty;
 	ty.value = ((q1.value*(R1::num/R1::den)) * (q2.value*(R2::num/R2::den)));
 	return ty;
@@ -219,8 +224,12 @@ Qty<details::division<U1, U2>, std::ratio_divide<R1, R2>> operator/(Qty<U1, R1> 
 * Cast function between two quantities
 */
 template<typename ResQty, typename U, typename R>
-ResQty qtyCast(Qty<U,R> qty){
+ResQty qtyCast(Qty<U,R> qt){
+	ResQty new_qt;
 
+	new_qt.value = qt.value*(R::num/R::den);
+
+	return new_qt;
 }
 
 	namespace literals {
