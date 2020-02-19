@@ -116,17 +116,17 @@ bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_greater_equal<R1
 
 template<typename U, typename R1, typename R2>
 Qty<U, std::ratio_add<R1, R2>> operator+(Qty<U, R1> q1, Qty<U, R2> q2){
-	return Qty<((q1::value*(R1::num/R1::den)) / (q2::value*(R2::num/R2::den))),std::ratio_add<R1, R2>>;
+	return Qty<((q1.value*(R1::num/R1::den)) + (q2.value*(R2::num/R2::den))),std::ratio_add<R1, R2>>;
 }
 
 template<typename U, typename R1, typename R2>
 Qty<U, std::ratio_subtract<R1, R2>> operator-(Qty<U, R1> q1, Qty<U, R2> q2){
-	return Qty<((q1::value*(R1::num/R1::den)) / (q2::value*(R2::num/R2::den))),std::ratio_subtract<R1, R2>>;
+	return Qty<((q1.value*(R1::num/R1::den)) - (q2.value*(R2::num/R2::den))),std::ratio_subtract<R1, R2>>;
 }
 
 template<typename U1, typename R1, typename U2, typename R2>
 Qty<details::multiplication<U1, U2>, std::ratio_multiply<R1, R2>> operator*(Qty<U1, R1> q1, Qty<U2, R2> q2){
-	return Qty<((q1::value*(R1::num/R1::den)) / (q2::value*(R2::num/R2::den))),std::ratio_multiply<R1, R2>>;
+	return Qty<((q1::value*(R1::num/R1::den)) * (q2::value*(R2::num/R2::den))),std::ratio_multiply<R1, R2>>;
 }
 
 template<typename U1, typename R1, typename U2, typename R2>
