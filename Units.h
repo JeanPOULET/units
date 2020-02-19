@@ -52,10 +52,24 @@ struct Qty {
 	}
 
 	template<typename ROther>
-	Qty& operator+=(Qty<U, ROther> other);
+	Qty& operator+=(Qty<U, ROther> other){
+		if(this.U != other.U){
+			return this;
+		}
+		Qty<U,R>res;
+		res.value = value*R::value + other.value*R::value;
+		return res;
+	}
 
 	template<typename ROther>
-	Qty& operator-=(Qty<U, ROther> other);
+	Qty& operator-=(Qty<U, ROther> other){
+		if(this.U != other.U){
+			return this;
+		}
+		Qty<U,R>res;
+		res.value = value*R::value - other.value*R::value;
+		return res;
+	}
 
 };
 
@@ -84,13 +98,14 @@ namespace details{
 	template<class Unit1, class Unit2>
 	class division{
 		public:
-		using unit_div = Unit<Unit1::metre - Unit2::metre, Unit1::kilogram - Unit2::kilogram,  Unit1::Second - Unit2::Second, Unit1::Ampere - Unit2::Ampere,  Unit1::Kelvin - Unit2::Kelvin,  Unit1::Mole - Unit2::Mole,  Unit1::Candela - Unit2::Candela>;
+		
+		using unit_div = Unit<Unit1::Metre - Unit2::Metre, Unit1::Kilogram - Unit2::Kilogram,  Unit1::Second - Unit2::Second, Unit1::Ampere - Unit2::Ampere,  Unit1::Kelvin - Unit2::Kelvin,  Unit1::Mole - Unit2::Mole,  Unit1::Candela - Unit2::Candela>;
 	};
 
 	template<class Unit1, class Unit2>
 	class multiplication{
 		public:
-		using unit_mult = Unit<Unit1::metre + Unit2::metre, Unit1::kilogram + Unit2::kilogram,  Unit1::Second + Unit2::Second, Unit1::Ampere + Unit2::Ampere,  Unit1::Kelvin + Unit2::Kelvin,  Unit1::Mole + Unit2::Mole,  Unit1::Candela + Unit2::Candela>;
+		using unit_mult = Unit<Unit1::Metre + Unit2::Metre, Unit1::Kilogram + Unit2::Kilogram,  Unit1::Second + Unit2::Second, Unit1::Ampere + Unit2::Ampere,  Unit1::Kelvin + Unit2::Kelvin,  Unit1::Mole + Unit2::Mole,  Unit1::Candela + Unit2::Candela>;
 	};
 }
 
