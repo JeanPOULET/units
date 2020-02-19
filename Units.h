@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <ratio>
+#include <stdio.h>
 
 namespace phy {
 
@@ -174,13 +175,15 @@ bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2){
 
 template<typename U, typename R1, typename R2>
 Qty<U, R1> operator+(Qty<U, R1> q1, Qty<U, R2> q2){
-	if(std::ratio_less<R1, R2>::value){
+	if(std::ratio_equal<R1, R2>::value){
 		Qty<U,R2> ty;
-		ty.value = ((q1.value*(R1::num/R1::den)) + (q2.value*(R2::num/R2::den)));
+		ty.value = q1.value+q2.value;
+		printf("value  : %d\n q1 : %d  q2 : %d\n",ty.value,q1.value,q2.value);
 		return ty;
 	}else{
 		Qty<U,R1> ty;
 		ty.value = ((q1.value*(R1::num/R1::den)) + (q2.value*(R2::num/R2::den)));
+		printf("value  : %d\n q1 : %d  q2 : %d\n",ty.value,q1.value,q2.value);
 		return ty;
 	}
 	
@@ -223,7 +226,7 @@ template<typename ResQty, typename U, typename R>
 ResQty qtyCast(Qty<U,R> qt){
 	ResQty new_qt;
 
-	new_qt.value = qt.value*(R::num/R::den);
+	new_qt.value = qt.value*R::den;
 
 	return new_qt;
 }
