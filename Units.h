@@ -43,7 +43,13 @@ struct Qty {
 
 	intmax_t value;
 
-	Qty(intmax_t v);
+	Qty(){
+		value = 0;
+	}
+
+	Qty(intmax_t v){
+		value = v;
+	}
 
 	template<typename ROther>
 	Qty& operator+=(Qty<U, ROther> other);
@@ -93,22 +99,52 @@ namespace details{
 */
 
 template<typename U, typename R1, typename R2>
-bool operator==(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_equal<R1, R2>();}
+bool operator==(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_equal<R1, R2>::value){
+ 		return q1.value == q2.value;
+	}
+	return q1.value == q2.value*R2;
+}		  
 
 template<typename U, typename R1, typename R2>
-bool operator!=(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_not_equal<R1, R2>();}
+bool operator!=(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_equal<R1, R2>::value){
+ 		return q1.value != q2.value;
+	}
+	return q1.value != q2.value*R2;
+}	
 
 template<typename U, typename R1, typename R2>
-bool operator<(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_less<R1, R2>();}
+bool operator<(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_equal<R1, R2>::value){
+ 		return q1.value < q2.value;
+	}
+	return q1.value < q2.value*R2;
+}	
 
 template<typename U, typename R1, typename R2>
-bool operator<=(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_less_equal<R1, R2>();}
+bool operator<=(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_equal<R1, R2>::value){
+ 		return q1.value <= q2.value;
+	}
+	return q1.value <= q2.value*R2;
+}	
 
 template<typename U, typename R1, typename R2>
-bool operator>(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_greater<R1, R2>();}
+bool operator>(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_equal<R1, R2>::value){
+ 		return q1.value > q2.value;
+	}
+	return q1.value > q2.value*R2;
+}	
 
 template<typename U, typename R1, typename R2>
-bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2){return std::ratio_greater_equal<R1, R2>();}
+bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2){
+	if(std::ratio_equal<R1, R2>::value){
+ 		return q1.value >= q2.value;
+	}
+	return q1.value >= q2.value*R2;
+}	
 
 /*
 * Arithmetic operators
