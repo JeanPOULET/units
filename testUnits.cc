@@ -220,6 +220,76 @@ TEST(NotIdenticTypes_assign_sub,Seconds_minutes_seconds){
 	EXPECT_EQ(ss.value,44);
 }
 
+TEST(IdenticTypes_assign_add,Ampere_ampere_mega){
+
+	using  namespace phy::literals;
+	auto ss = 45_amperes;
+	phy::Qty<phy::Ampere,std::mega> milli(40);
+
+	ss += milli;
+
+	EXPECT_EQ(ss.value,40);
+
+}
+
+													/*********************************************
+													 * 			       TYPE MULT				 *
+													 * ******************************************/
+
+TEST(Types_mult,Metre_metre_metre){
+
+	using  namespace phy::literals;
+	auto m = 20_metres;
+	phy::Qty<phy::Metre> mm(20);
+
+	auto ss = m * mm;
+
+	EXPECT_EQ(ss.value,400);
+
+}
+
+TEST(Types_mult,Metre_metre_centi){
+
+	using  namespace phy::literals;
+	auto m = 20_metres;
+	phy::Qty<phy::Metre,std::centi> mm(20);
+
+	auto ss = m * mm;
+
+	EXPECT_EQ(ss.value,40000);
+
+}
+
+TEST(Types_mult,Metre_centi_metre){
+
+	using  namespace phy::literals;
+	auto m = 20_metres;
+	phy::Qty<phy::Metre,std::centi> mm(20);
+
+	auto ss = mm * m;
+
+	EXPECT_EQ(ss.value,40000);
+
+}
+
+TEST(Types_mult,Metre_metre_x_seconds){
+
+	using  namespace phy::literals;
+	auto m = 20_metres;
+	auto s = 20_seconds;
+
+	auto ss = m * s;
+
+	EXPECT_EQ(ss.value,400);
+
+}
+
+
+
+
+
+
+
 													/*********************************************
 													 * 			 SAME TYPE COMPA				 *
 													 * ******************************************/
@@ -369,6 +439,75 @@ TEST(IdenticTypes_comparaison_different,Meters_metre_centi_){
 	phy::Qty<phy::Metre, std::centi> mm2(3000);
 
 	EXPECT_TRUE(mm!=mm2);
+
+}
+
+
+													/*********************************************
+													 * 			NOT SAME TYPE DIV				 *
+													 * ******************************************/
+
+
+
+TEST(IdenticTypes_division,Meters_metre_metre){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(100);
+	phy::Qty<phy::Metre> mm2(5);
+	auto res = mm/mm2;
+	EXPECT_EQ(res.value,20);
+
+}
+
+TEST(IdenticTypes_division,Seconds_second_second){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Second> mm(100);
+	auto mm2 = 5_seconds;
+	auto res = mm/mm2;
+	EXPECT_EQ(res.value,20);
+
+}
+
+TEST(IdenticTypes_division,Seconds_megasecond_second){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Second,std::mega> mm(10);
+	auto mm2 = 5_seconds;
+	auto res = mm/mm2;
+	EXPECT_EQ(res.value,2000000);
+
+}
+
+TEST(IdenticTypes_division,Seconds_second_megaSecond){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Second,std::mega> mm(10);
+	auto mm2 = 5_seconds;
+	auto res = mm2/mm;
+	EXPECT_EQ(res.value,0);
+
+}
+
+TEST(NotIdenticTypes_division,Metre_metre_second){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(100);
+	auto mm2 = 5_seconds;
+	auto res = mm/mm2;
+	EXPECT_EQ(res.value,20);
+
+}
+
+TEST(NotIdenticTypes_division,Ampere_metre_second){
+
+	using  namespace phy::literals;
+	auto mm = 100_metres;
+	auto mm2 = 5_seconds;
+	auto amp = 14_amperes;
+	auto res = mm/mm2*amp;
+	EXPECT_EQ(res.value,(20*14));
+
 }
 
 int main(int argc, char* argv[]) {
