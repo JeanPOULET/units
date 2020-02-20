@@ -54,16 +54,18 @@ struct Qty {
 
 	template<typename ROther>
 	Qty& operator+=(Qty<U, ROther> other){
-		/*if(this.U != other.U){
-			return *this;
-		}*/
-		if(std::ratio_less<R,ROther>::value){
-			using Ratio = std::ratio_divide<R, ROther>;
-			value = value + other.value*(Ratio::den/Ratio::num);
-		}else if(std::ratio_equal<R,ROther>::value){
-			value = value + other.value;
+
+		if constexpr(std::ratio_equal<Ratio, ROther>::value){
+			value = value+other.value;
+		}else if constexpr(std::ratio_less<Ratio,ROther>::value){
+			using RatioF = std::ratio_divide<Ratio,ROther>;
+			value =((value/RatioF::den)+other.value);
+		}else{
+			using RatioF = std::ratio_divide<Ratio,ROther>;
+
+			value = value+other.value/(RatioF::num/RatioF::den);
+			
 		}
-		
 		return *this;
 	}
 

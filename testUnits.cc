@@ -76,6 +76,52 @@ TEST(IdenticTypes_add,Meters_mill_centi){
 
 }
 
+TEST(IdenticTypes_add,Meters_metre_milli){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre , std::milli> mm2(2000);
+
+	auto mm3 = mm + mm2;
+
+	EXPECT_EQ(mm3.value,22);
+
+}
+
+TEST(IdenticTypes_assign_add,Meters_metre_metre){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre> mm2(20);
+
+	mm += mm2;
+	EXPECT_EQ(mm.value,40);
+
+}
+
+TEST(IdenticTypes_assign_add,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre,std::centi> mm2(200);
+
+	mm += mm2;
+
+	EXPECT_EQ(mm.value,22);
+
+}
+
+TEST(IdenticTypes_assign_add,Seconds_minutes_seconds){
+
+	using  namespace phy::literals;
+	auto ss = 45_seconds;
+	phy::Qty<phy::Second,std::milli> milli(1700);
+
+	ss += milli;
+
+	EXPECT_EQ(ss.value,46);
+
+}
 
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
