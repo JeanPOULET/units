@@ -242,21 +242,37 @@ Qty<typename details::division<U1, U2>::unit_div, std::ratio_divide<R1, R2>> ope
 	if constexpr(std::is_same<U1,U2>::value){
 		if constexpr(std::ratio_equal<R1,R2>::value){
 			Qty<typename details::division<U1, U2>::unit_div,std::ratio_divide<R1, R2>> ty;
+			if(q2.value==0){
+				printf("Division par 0\n");
+				return ty;
+			}
 			ty.value = q1.value / q2.value;
 			return ty;
 		}else if constexpr(std::ratio_less<R1,R2>::value){
 			Qty<typename details::division<U1, U2>::unit_div,std::ratio_divide<R1, R2>> ty;
 			using Ratio = std::ratio_divide<R1,R2>;
+			if(q2.value==0){
+				printf("Division par 0\n");
+				return ty;
+			}
 			ty.value = q1.value*Ratio::num /q2.value;
 			return ty;
 		}else{
 			Qty<typename details::division<U1, U2>::unit_div,std::ratio_divide<R1, R2>> ty;
 			using Ratio = std::ratio_divide<R1,R2>;
+			if(q2.value==0){
+				printf("Division par 0\n");
+				return ty;
+			}
 			ty.value = q1.value / q2.value*Ratio::num;
 			return ty;
 		}
 	}else{
 		Qty<typename details::division<U1, U2>::unit_div,std::ratio_divide<R1, R2>> ty;
+		if(q2.value==0){
+			printf("Division par 0\n");
+			return ty;
+		}
 		ty.value = q1.value / q2.value;
 		return ty;
 	}

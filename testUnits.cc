@@ -433,6 +433,15 @@ TEST(NotIdenticTypes_division,Ampere_metre_second){
 
 }
 
+TEST(NotIdenticTypes_division,Ampere_metre_0){
+
+	using  namespace phy::literals;
+	auto mm = 100_metres;
+	auto mm2 = 0_seconds;
+	auto res = mm/mm2;
+
+}
+
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
