@@ -54,12 +54,17 @@ struct Qty {
 
 	template<typename ROther>
 	Qty& operator+=(Qty<U, ROther> other){
-		if(this.U != other.U){
-			return this;
+		/*if(this.U != other.U){
+			return *this;
+		}*/
+		if(std::ratio_less<R,ROther>::value){
+			using Ratio = std::ratio_divide<R, ROther>;
+			value = value + other.value*(Ratio::den/Ratio::num);
+		}else if(std::ratio_equal<R,ROther>::value){
+			value = value + other.value;
 		}
-		Qty<U,R>res;
-		res.value = value*(ROther::num/ROther::den) + other.value*(ROther::num/ROther::den);
-		return res;
+		
+		return *this;
 	}
 
 	template<typename ROther>
@@ -174,19 +179,13 @@ bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2){
 */
 
 template<typename U, typename R1, typename R2>
-Qty<U, R2> operator+(Qty<U, R1> q1, Qty<U, R2> q2){
-	if(std::ratio_equal<R1, R2>::value){
-		Qty<U,R2> ty;
-		ty.value = q1.value+q2.value;
-		printf("value  : %d\n q1 : %d  q2 : %d\n",ty.value,q1.value,q2.value);
+Qty<U, typename std::conditional<(std::ratio_less<R1, R2>::value), R1, R2>::type> operator+(Qty<U, R1> q1, Qty<U, R2> q2){
+	if constexpr(std::ratio_less<R1, R2>::value){
+		Qty<U,R1> ty(q1.value+q2.value);
 		return ty;
 	}else{
-		Qty<U,R1> ty;
-		ty.value = ((double(q1.value*(double(R1::num)/R1::den))) + (double(q2.value*(double(R2::num)/R2::den))));
-		printf("num = %d, den = %d \nR = %lf \n", R1::num, R1::den, (double(R1::num)/R1::den));
-		printf("q1 = %d\nq2 = %d\nq1.value = %lf\nq2.value = %lf\n",q1.value, q2.value, (double(q1.value*(double(R1::num)/R1::den))), (double(q2.value*(double(R2::num)/R2::den))));
-		
-		printf("ty value = %d\n", ty.value);
+		Qty<U,R2> ty(q1.value+q2.value);
+
 		return ty;
 	}
 }
@@ -227,7 +226,7 @@ template<typename ResQty, typename U, typename R>
 ResQty qtyCast(Qty<U,R> qt){
 	ResQty new_qt;
 
-	new_qt.value = qt.value*R::den;
+	new_qt +=qt;
 
 	return new_qt;
 }
