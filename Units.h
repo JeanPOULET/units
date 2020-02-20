@@ -101,16 +101,9 @@ using Foot = Qty<Metre, std::ratio<3, 10>>;
 using Inch = Qty<Metre, std::ratio<2, 100>>;
 
 namespace details{
-	template<class Unit1>
-	class addition{
-		public:
-		using unit_plus = Unit<Unit1::Metre,Unit1::Kilogram,Unit1::Second,Unit1::Ampere,Unit1::Kelvin,Unit1::Mole,Unit1::Candela>;
-	
-	};
 
 	template<class Unit1, class Unit2>
-	class division{
-		public:
+	struct division{
 		using unit_div = Unit<Unit1::metre - Unit2::metre, Unit1::kilogram - Unit2::kilogram,  Unit1::second - Unit2::second, Unit1::ampere - Unit2::ampere,  Unit1::kelvin - Unit2::kelvin,  Unit1::mole - Unit2::mole,  Unit1::candela - Unit2::candela>;
 	};
 
@@ -180,19 +173,26 @@ bool operator>=(Qty<U, R1> q1, Qty<U, R2> q2){
 
 template<typename U, typename R1, typename R2>
 Qty<U, typename std::conditional<(std::ratio_less<R1, R2>::value), R1, R2>::type> operator+(Qty<U, R1> q1, Qty<U, R2> q2){
-	if constexpr(std::ratio_less<R1, R2>::value){
+	if constexpr(std::ratio_equal<R1, R2>::value){
 		Qty<U,R1> ty(q1.value+q2.value);
 		return ty;
+	}else if constexpr(std::ratio_less<R1,R2>::value){
+		using Ratio = std::ratio_divide<R1,R2>;
+		printf(" elif num : %llu  den : %llu\n",Ratio::num,Ratio::den);
+		Qty<U,R1> ty((q1.value/Ratio::den)+q2.value);
+		return ty;
 	}else{
-		Qty<U,R2> ty(q1.value+q2.value);
-
+		using Ratio = std::ratio_divide<R1,R2>;
+		printf(" else num : %llu  den : %llu\n",Ratio::num,Ratio::den);
+		Qty<U,R2> ty(q1.value+q2.value/(Ratio::num/Ratio::den));
 		return ty;
 	}
+
 }
 
 template<typename U, typename R1, typename R2>
-Qty<U, R1> operator-(Qty<U, R1> q1, Qty<U, R2> q2){
-	if(std::ratio_equal<R1, R2>::value){
+Qty<U, typename std::conditional<(std::ratio_less<R1, R2>::value), R1, R2>::type> operator-(Qty<U, R1> q1, Qty<U, R2> q2){
+	if constexpr(std::ratio_less<R1, R2>::value){
 		Qty<U,R2> ty;
 		ty.value = q1.value - q2.value;
 		return ty;
@@ -205,14 +205,14 @@ Qty<U, R1> operator-(Qty<U, R1> q1, Qty<U, R2> q2){
 }
 
 template<typename U1, typename R1, typename U2, typename R2>
-Qty<details::multiplication<U1, U2>, std::ratio_multiply<R1, R2>> operator*(Qty<U1, R1> q1, Qty<U2, R2> q2){
+Qty<typename details::multiplication<U1, U2>::unit_mult, std::ratio_multiply<R1, R2>> operator*(Qty<U1, R1> q1, Qty<U2, R2> q2){
 	Qty<details::multiplication<U1, U2>,std::ratio_multiply<R1, R2>> ty;
 	ty.value = ((q1.value*(R1::num/R1::den)) * (q2.value*(R2::num/R2::den)));
 	return ty;
 }
 
 template<typename U1, typename R1, typename U2, typename R2>
-Qty<details::division<U1, U2>, std::ratio_divide<R1, R2>> operator/(Qty<U1, R1> q1, Qty<U2, R2> q2){
+Qty<typename details::division<U1, U2>::unit_div, std::ratio_divide<R1, R2>> operator/(Qty<U1, R1> q1, Qty<U2, R2> q2){
 	Qty<details::division<U1, U2>,std::ratio_divide<R1, R2>> ty;
 	ty.value = ((q1.value*(R1::num/R1::den)) / (q2.value*(R2::num/R2::den)));
 	return ty;
