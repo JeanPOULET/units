@@ -107,6 +107,18 @@ TEST(NotIdenticTypes_add,Meters_mill_centi){
 
 }
 
+TEST(NotIdenticTypes_add,Meters_mill_centi_nega){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre , std::milli> mm(20);
+	phy::Qty<phy::Metre , std::centi> mm2(-30);
+
+	auto mm3 = mm + mm2;
+
+	EXPECT_EQ(mm3.value,-28);
+
+}
+
 TEST(NotIdenticTypes_assign_add,Meters_metre_centi_){
 
 	using  namespace phy::literals;
@@ -143,6 +155,18 @@ TEST(IdenticTypes_sub,Meters_milli){
 	auto mm3 = mm - mm2;
 
 	EXPECT_EQ(mm3.value,20);
+
+}
+
+TEST(IdenticTypes_sub,Meters_milli_nega){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre , std::milli> mm(10);
+	phy::Qty<phy::Metre , std::milli> mm2(30);
+
+	auto mm3 = mm - mm2;
+
+	EXPECT_EQ(mm3.value,-20);
 
 }
 
@@ -254,6 +278,80 @@ TEST(Types_mult,Metre_metre_x_seconds){
 
 	EXPECT_EQ(ss.value,400);
 
+}
+
+													/*********************************************
+													 * 			NOT SAME TYPE SUB				 *
+													 * ******************************************/
+
+TEST(IdenticTypes_comparaison_less,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre> mm2(30);
+
+	EXPECT_TRUE(mm<mm2);
+}
+
+TEST(IdenticTypes_comparaison_less_equal_different,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre> mm2(30);
+
+	EXPECT_TRUE(mm<=mm2);
+}
+
+TEST(IdenticTypes_comparaison_less_equal_same,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+
+	EXPECT_TRUE(mm<=mm);
+}
+
+TEST(IdenticTypes_comparaison_greater,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre> mm2(30);
+
+	EXPECT_TRUE(mm2>mm);
+}
+
+TEST(IdenticTypes_comparaison_greater_equal_different,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre> mm2(30);
+
+	EXPECT_TRUE(mm2>=mm);
+}
+
+TEST(IdenticTypes_comparaison_greater_equal_same,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+
+	EXPECT_TRUE(mm>=mm);
+}
+
+TEST(IdenticTypes_comparaison_equal,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+
+	EXPECT_TRUE(mm==mm);
+}
+
+
+TEST(IdenticTypes_comparaison_different,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre> mm2(30);
+
+	EXPECT_TRUE(mm!=mm2);
 }
 
 int main(int argc, char* argv[]) {
