@@ -232,6 +232,10 @@ TEST(IdenticTypes_assign_add,Ampere_ampere_mega){
 
 }
 
+													/*********************************************
+													 * 			       TYPE MULT				 *
+													 * ******************************************/
+
 TEST(Types_mult,Metre_metre_metre){
 
 	using  namespace phy::literals;
@@ -279,6 +283,12 @@ TEST(Types_mult,Metre_metre_x_seconds){
 	EXPECT_EQ(ss.value,400);
 
 }
+
+
+
+
+
+
 
 													/*********************************************
 													 * 			NOT SAME TYPE SUB				 *
@@ -352,6 +362,75 @@ TEST(IdenticTypes_comparaison_different,Meters_metre_centi_){
 	phy::Qty<phy::Metre> mm2(30);
 
 	EXPECT_TRUE(mm!=mm2);
+
+}
+
+
+													/*********************************************
+													 * 			NOT SAME TYPE DIV				 *
+													 * ******************************************/
+
+
+
+TEST(IdenticTypes_division,Meters_metre_metre){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(100);
+	phy::Qty<phy::Metre> mm2(5);
+	auto res = mm/mm2;
+	EXPECT_EQ(res.value,20);
+
+}
+
+TEST(IdenticTypes_division,Seconds_second_second){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Second> mm(100);
+	auto mm2 = 5_seconds;
+	auto res = mm/mm2;
+	EXPECT_EQ(res.value,20);
+
+}
+
+TEST(IdenticTypes_division,Seconds_megasecond_second){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Second,std::mega> mm(10);
+	auto mm2 = 5_seconds;
+	auto res = mm/mm2;
+	EXPECT_EQ(res.value,2000000);
+
+}
+
+TEST(IdenticTypes_division,Seconds_second_megaSecond){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Second,std::mega> mm(10);
+	auto mm2 = 5_seconds;
+	auto res = mm2/mm;
+	EXPECT_EQ(res.value,0);
+
+}
+
+TEST(NotIdenticTypes_division,Metre_metre_second){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(100);
+	auto mm2 = 5_seconds;
+	auto res = mm/mm2;
+	EXPECT_EQ(res.value,20);
+
+}
+
+TEST(NotIdenticTypes_division,Ampere_metre_second){
+
+	using  namespace phy::literals;
+	auto mm = 100_metres;
+	auto mm2 = 5_seconds;
+	auto amp = 14_amperes;
+	auto res = mm/mm2*amp;
+	EXPECT_EQ(res.value,(20*14));
+
 }
 
 int main(int argc, char* argv[]) {
