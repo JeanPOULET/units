@@ -71,12 +71,18 @@ struct Qty {
 
 	template<typename ROther>
 	Qty& operator-=(Qty<U, ROther> other){
-		if(this.U != other.U){
-			return this;
+		if constexpr(std::ratio_equal<Ratio, ROther>::value){
+			value = value-other.value;
+		}else if constexpr(std::ratio_less<Ratio,ROther>::value){
+			using RatioF = std::ratio_divide<Ratio,ROther>;
+			value =((value/RatioF::den)+other.value);
+		}else{
+			using RatioF = std::ratio_divide<Ratio,ROther>;
+
+			value = value-other.value/(RatioF::num/RatioF::den);
+			
 		}
-		Qty<U,R>res;
-		res.value = value*(ROther::num/ROther::den) - other.value*(ROther::num/ROther::den);
-		return res;
+		return *this;
 	}
 
 };
@@ -187,21 +193,22 @@ Qty<U, typename std::conditional<(std::ratio_less<R1, R2>::value), R1, R2>::type
 		Qty<U,R2> ty(q1.value+q2.value/(Ratio::num/Ratio::den));
 		return ty;
 	}
-
 }
 
 template<typename U, typename R1, typename R2>
 Qty<U, typename std::conditional<(std::ratio_less<R1, R2>::value), R1, R2>::type> operator-(Qty<U, R1> q1, Qty<U, R2> q2){
-	if constexpr(std::ratio_less<R1, R2>::value){
-		Qty<U,R2> ty;
-		ty.value = q1.value - q2.value;
+	if constexpr(std::ratio_equal<R1, R2>::value){
+		Qty<U,R1> ty(q1.value-q2.value);
+		return ty;
+	}else if constexpr(std::ratio_less<R1,R2>::value){
+		using Ratio = std::ratio_divide<R1,R2>;
+		Qty<U,R1> ty((q1.value/Ratio::den)-q2.value);
 		return ty;
 	}else{
-		Qty<U,R1> ty;
-		ty.value = ((q1.value*(R1::num/R1::den)) - (q2.value*(R2::num/R2::den)));
+		using Ratio = std::ratio_divide<R1,R2>;
+		Qty<U,R2> ty(q1.value-q2.value/(Ratio::num/Ratio::den));
 		return ty;
 	}
-
 }
 
 template<typename U1, typename R1, typename U2, typename R2>
