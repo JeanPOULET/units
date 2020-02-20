@@ -185,11 +185,7 @@ TEST(NotIdenticTypes_assign_sub,Meters_metre_centi_){
 
 }
 
-<<<<<<< HEAD
-TEST(IdenticTypes_assign_add,Seconds_seconds_milli){
-=======
 TEST(NotIdenticTypes_assign_sub,Seconds_minutes_seconds){
->>>>>>> fe82713e104f04476b5ab55e7a2ed4995b0abf7a
 
 	using  namespace phy::literals;
 	auto ss = 45_seconds;
