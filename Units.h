@@ -180,12 +180,10 @@ Qty<U, typename std::conditional<(std::ratio_less<R1, R2>::value), R1, R2>::type
 		return ty;
 	}else if constexpr(std::ratio_less<R1,R2>::value){
 		using Ratio = std::ratio_divide<R1,R2>;
-		printf(" elif num : %llu  den : %llu\n",Ratio::num,Ratio::den);
 		Qty<U,R1> ty((q1.value/Ratio::den)+q2.value);
 		return ty;
 	}else{
 		using Ratio = std::ratio_divide<R1,R2>;
-		printf(" else num : %llu  den : %llu\n",Ratio::num,Ratio::den);
 		Qty<U,R2> ty(q1.value+q2.value/(Ratio::num/Ratio::den));
 		return ty;
 	}
@@ -208,9 +206,31 @@ Qty<U, typename std::conditional<(std::ratio_less<R1, R2>::value), R1, R2>::type
 
 template<typename U1, typename R1, typename U2, typename R2>
 Qty<typename details::multiplication<U1, U2>::unit_mult, std::ratio_multiply<R1, R2>> operator*(Qty<U1, R1> q1, Qty<U2, R2> q2){
-	Qty<details::multiplication<U1, U2>,std::ratio_multiply<R1, R2>> ty;
-	ty.value = ((q1.value*(R1::num/R1::den)) * (q2.value*(R2::num/R2::den)));
-	return ty;
+	
+	if constexpr(std::is_same<U1,U2>::value){
+		if constexpr(std::ratio_equal<R1,R2>::value){
+			Qty<typename details::multiplication<U1, U2>::unit_mult,std::ratio_multiply<R1, R2>> ty;
+			ty.value = q1.value * q2.value;
+			return ty;
+		}else if constexpr(std::ratio_less<R1,R2>::value){
+			Qty<typename details::multiplication<U1, U2>::unit_mult,std::ratio_multiply<R1, R2>> ty;
+			using Ratio = std::ratio_multiply<R1,R2>;
+			ty.value = q1.value *q2.value*Ratio::den;
+			return ty;
+		}else{
+			Qty<typename details::multiplication<U1, U2>::unit_mult,std::ratio_multiply<R1, R2>> ty;
+			using Ratio = std::ratio_multiply<R1,R2>;
+			ty.value = q1.value*Ratio::den *q2.value;
+			return ty;
+		}
+	}else{
+		Qty<typename details::multiplication<U1, U2>::unit_mult,std::ratio_multiply<R1, R2>> ty;
+		ty.value = q1.value * q2.value;
+		return ty;
+	}
+
+	 
+	
 }
 
 template<typename U1, typename R1, typename U2, typename R2>
