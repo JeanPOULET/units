@@ -221,10 +221,10 @@ TEST(NotIdenticTypes_assign_sub,Seconds_minutes_seconds){
 }
 
 													/*********************************************
-													 * 			NOT SAME TYPE SUB				 *
+													 * 			 SAME TYPE COMPA				 *
 													 * ******************************************/
 
-TEST(IdenticTypes_comparaison_less,Meters_metre_centi_){
+TEST(IdenticTypes_comparaison_less,Meters_metre){
 
 	using  namespace phy::literals;
 	phy::Qty<phy::Metre> mm(20);
@@ -233,7 +233,7 @@ TEST(IdenticTypes_comparaison_less,Meters_metre_centi_){
 	EXPECT_TRUE(mm<mm2);
 }
 
-TEST(IdenticTypes_comparaison_less_equal_different,Meters_metre_centi_){
+TEST(IdenticTypes_comparaison_less_equal_different,Meters_metre){
 
 	using  namespace phy::literals;
 	phy::Qty<phy::Metre> mm(20);
@@ -242,7 +242,7 @@ TEST(IdenticTypes_comparaison_less_equal_different,Meters_metre_centi_){
 	EXPECT_TRUE(mm<=mm2);
 }
 
-TEST(IdenticTypes_comparaison_less_equal_same,Meters_metre_centi_){
+TEST(IdenticTypes_comparaison_less_equal_same,Meters_metre){
 
 	using  namespace phy::literals;
 	phy::Qty<phy::Metre> mm(20);
@@ -250,7 +250,7 @@ TEST(IdenticTypes_comparaison_less_equal_same,Meters_metre_centi_){
 	EXPECT_TRUE(mm<=mm);
 }
 
-TEST(IdenticTypes_comparaison_greater,Meters_metre_centi_){
+TEST(IdenticTypes_comparaison_greater,Meters_metre){
 
 	using  namespace phy::literals;
 	phy::Qty<phy::Metre> mm(20);
@@ -259,7 +259,7 @@ TEST(IdenticTypes_comparaison_greater,Meters_metre_centi_){
 	EXPECT_TRUE(mm2>mm);
 }
 
-TEST(IdenticTypes_comparaison_greater_equal_different,Meters_metre_centi_){
+TEST(IdenticTypes_comparaison_greater_equal_different,Meters_metre){
 
 	using  namespace phy::literals;
 	phy::Qty<phy::Metre> mm(20);
@@ -268,7 +268,7 @@ TEST(IdenticTypes_comparaison_greater_equal_different,Meters_metre_centi_){
 	EXPECT_TRUE(mm2>=mm);
 }
 
-TEST(IdenticTypes_comparaison_greater_equal_same,Meters_metre_centi_){
+TEST(IdenticTypes_comparaison_greater_equal_same,Meters_metre){
 
 	using  namespace phy::literals;
 	phy::Qty<phy::Metre> mm(20);
@@ -276,7 +276,7 @@ TEST(IdenticTypes_comparaison_greater_equal_same,Meters_metre_centi_){
 	EXPECT_TRUE(mm>=mm);
 }
 
-TEST(IdenticTypes_comparaison_equal,Meters_metre_centi_){
+TEST(IdenticTypes_comparaison_equal,Meters_metre){
 
 	using  namespace phy::literals;
 	phy::Qty<phy::Metre> mm(20);
@@ -285,11 +285,88 @@ TEST(IdenticTypes_comparaison_equal,Meters_metre_centi_){
 }
 
 
-TEST(IdenticTypes_comparaison_different,Meters_metre_centi_){
+TEST(IdenticTypes_comparaison_different,Meters_metre){
 
 	using  namespace phy::literals;
 	phy::Qty<phy::Metre> mm(20);
 	phy::Qty<phy::Metre> mm2(30);
+
+	EXPECT_TRUE(mm!=mm2);
+}
+
+													/*********************************************
+													 * 			NOT SAME TYPE COMPA				 *
+													 * ******************************************/
+
+TEST(IdenticTypes_comparaison_less,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(2000);
+	phy::Qty<phy::Metre, std::centi> mm2(30);
+
+	EXPECT_TRUE(mm2<mm);
+}
+
+TEST(IdenticTypes_comparaison_less_equal_different,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(2000);
+	phy::Qty<phy::Metre, std::centi> mm2(20);
+
+	EXPECT_TRUE(mm2<=mm);
+}
+
+TEST(IdenticTypes_comparaison_less_equal_equal,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre, std::centi> mm2(2000);
+
+	EXPECT_TRUE(mm<=mm);
+}
+
+TEST(IdenticTypes_comparaison_greater,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre, std::centi> mm2(30);
+
+	EXPECT_TRUE(mm>mm2);
+}
+
+TEST(IdenticTypes_comparaison_greater_equal_different,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre, std::centi> mm2(30);
+
+	EXPECT_TRUE(mm>=mm2);
+}
+
+TEST(IdenticTypes_comparaison_greater_equal_same,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre, std::centi> mm2(2000);
+
+	EXPECT_TRUE(mm>=mm);
+}
+
+TEST(IdenticTypes_comparaison_equal,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre, std::centi> mm2(2000);
+
+	EXPECT_TRUE(mm==mm2);
+}
+
+
+TEST(IdenticTypes_comparaison_different,Meters_metre_centi_){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Metre> mm(20);
+	phy::Qty<phy::Metre, std::centi> mm2(3000);
 
 	EXPECT_TRUE(mm!=mm2);
 }
