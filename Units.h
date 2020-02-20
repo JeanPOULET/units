@@ -59,11 +59,10 @@ struct Qty {
 			value = value+other.value;
 		}else if constexpr(std::ratio_less<Ratio,ROther>::value){
 			using RatioF = std::ratio_divide<Ratio,ROther>;
-			value =((value/RatioF::den)+other.value);
+			value =value+other.value*(RatioF::den/RatioF::num);
 		}else{
 			using RatioF = std::ratio_divide<Ratio,ROther>;
-
-			value = value+other.value/(RatioF::num/RatioF::den);
+			value = value+(other.value/(RatioF::num/RatioF::den));
 			
 		}
 		return *this;
@@ -75,10 +74,9 @@ struct Qty {
 			value = value-other.value;
 		}else if constexpr(std::ratio_less<Ratio,ROther>::value){
 			using RatioF = std::ratio_divide<Ratio,ROther>;
-			value =((value/RatioF::den)+other.value);
+			value =value-(other.value*(RatioF::den/RatioF::num));
 		}else{
 			using RatioF = std::ratio_divide<Ratio,ROther>;
-
 			value = value-other.value/(RatioF::num/RatioF::den);
 			
 		}
@@ -193,7 +191,7 @@ Qty<U, typename std::conditional<(std::ratio_less<R1, R2>::value), R1, R2>::type
 		return ty;
 	}else if constexpr(std::ratio_less<R1,R2>::value){
 		using Ratio = std::ratio_divide<R1,R2>;
-		Qty<U,R1> ty((q1.value/Ratio::den)+q2.value);
+		Qty<U,R1> ty(q1.value+q2.value*(Ratio::den/Ratio::num));
 		return ty;
 	}else{
 		using Ratio = std::ratio_divide<R1,R2>;
@@ -209,7 +207,7 @@ Qty<U, typename std::conditional<(std::ratio_less<R1, R2>::value), R1, R2>::type
 		return ty;
 	}else if constexpr(std::ratio_less<R1,R2>::value){
 		using Ratio = std::ratio_divide<R1,R2>;
-		Qty<U,R1> ty((q1.value/Ratio::den)-q2.value);
+		Qty<U,R1> ty(q1.value-q2.value*(Ratio::den/Ratio::num));
 		return ty;
 	}else{
 		using Ratio = std::ratio_divide<R1,R2>;
@@ -291,9 +289,9 @@ Qty<typename details::division<U1, U2>::unit_div, std::ratio_divide<R1, R2>> ope
 */
 template<typename ResQty, typename U, typename R>
 ResQty qtyCast(Qty<U,R> qt){
-	ResQty new_qt;
 
-	new_qt +=qt;
+	ResQty new_qt;
+	new_qt+=qt;
 
 	return new_qt;
 }

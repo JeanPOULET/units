@@ -83,6 +83,8 @@ TEST(NotIdenticTypes_add,Meters_centi_milli){
 
 }
 
+
+
 TEST(NotIdenticTypes_add,Meters_metre_nano){
 
 	using  namespace phy::literals;
@@ -103,9 +105,10 @@ TEST(NotIdenticTypes_add,Meters_mill_centi){
 
 	auto mm3 = mm + mm2;
 
-	EXPECT_EQ(mm3.value,22);
+	EXPECT_EQ(mm3.value,20+(20*10));
 
 }
+
 
 TEST(NotIdenticTypes_add,Meters_mill_centi_nega){
 
@@ -115,7 +118,7 @@ TEST(NotIdenticTypes_add,Meters_mill_centi_nega){
 
 	auto mm3 = mm + mm2;
 
-	EXPECT_EQ(mm3.value,-28);
+	EXPECT_EQ(mm3.value,20-(30*10));
 
 }
 
@@ -131,7 +134,7 @@ TEST(NotIdenticTypes_assign_add,Meters_metre_centi_){
 
 }
 
-TEST(NotIdenticTypes_assign_add,Seconds_minutes_seconds){
+TEST(NotIdenticTypes_assign_add,Seconds_milli){
 
 	using  namespace phy::literals;
 	auto ss = 45_seconds;
@@ -140,6 +143,17 @@ TEST(NotIdenticTypes_assign_add,Seconds_minutes_seconds){
 	ss += milli;
 
 	EXPECT_EQ(ss.value,46);
+}
+
+TEST(NotIdenticTypes_assign_add,Seconds_milli_seconds){
+
+	using  namespace phy::literals;
+	auto ss = 45_seconds;
+	phy::Qty<phy::Second,std::milli> milli(1700);
+
+	milli += ss;
+
+	EXPECT_EQ(milli.value,(45*1000)+1700);
 }
 
 													/*********************************************
@@ -224,11 +238,23 @@ TEST(IdenticTypes_assign_add,Ampere_ampere_mega){
 
 	using  namespace phy::literals;
 	auto ss = 45_amperes;
-	phy::Qty<phy::Ampere,std::mega> milli(40);
+	phy::Qty<phy::Ampere,std::mega> mega(40);
 
-	ss += milli;
+	ss += mega;
 
-	EXPECT_EQ(ss.value,40);
+	EXPECT_EQ(ss.value,40000045);
+
+}
+
+TEST(IdenticTypes_assign_add,Ampere_mega_ampere){
+
+	using  namespace phy::literals;
+	auto ss = 45_amperes;
+	phy::Qty<phy::Ampere,std::mega> mega(50);
+
+	mega += ss;
+
+	EXPECT_EQ(mega.value,50);
 
 }
 
@@ -515,7 +541,38 @@ TEST(NotIdenticTypes_division,Ampere_metre_0){
 	using  namespace phy::literals;
 	auto mm = 100_metres;
 	auto mm2 = 0_seconds;
+	auto mm3 = 5_seconds;
 	auto res = mm/mm2;
+	auto res2 = mm/mm3;
+	res += res2;
+	EXPECT_EQ(res.value,20);
+
+}
+
+TEST(QtyCast,Metre_milli){
+
+	using  namespace phy::literals;
+	auto mm = 100_metres;
+	auto res = phy::qtyCast<phy::Qty<phy::Metre,std::milli>>(mm);
+	EXPECT_EQ(res.value,100000);
+
+}
+
+TEST(QtyCast,Kilogram_nano){
+
+	using  namespace phy::literals;
+	auto mm = 100_kilograms;
+	auto res = phy::qtyCast<phy::Qty<phy::Kilogram,std::nano>>(mm);
+	EXPECT_EQ(res.value,100000000000);
+
+}
+
+TEST(QtyCast,MegaAmpere_milli){
+
+	using  namespace phy::literals;
+	phy::Qty<phy::Ampere,std::mega> amp(15);
+	auto res = phy::qtyCast<phy::Qty<phy::Ampere,std::milli>>(amp);
+	EXPECT_EQ(res.value,15000000000);
 
 }
 
